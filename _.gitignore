@@ -1,0 +1,5 @@
+.env
+state.json
+output.txt
+report.html
+__pycache__/
