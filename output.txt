@@ -1,0 +1,5 @@
+Trace summary
+4 model calls, all gemini-3.5-flash-lite, all in the reading area.
+Call 1 (the full pack) used 2,283 tokens.
+Calls 2–4 used 603, 610 and 563 tokens.
+Total: 4,059 tokens. The plan stayed valid after every call.
