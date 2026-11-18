@@ -1,1002 +1,252 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MTM — Event Plan</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --bg: #f7f8fa;
-      --surface: #fff;
-      --surface-2: #fbfcfd;
-      --text: #182230;
-      --muted: #687586;
-      --line: #e7ebf0;
-      --accent: #3867e8;
-      --accent-soft: #eef3ff;
-      --green: #168451;
-      --green-bg: #eaf7f0;
-      --amber: #a86b12;
-      --amber-bg: #fff5e4;
-      --red: #c34242;
-      --red-bg: #fff0ef;
-      --shadow: 0 8px 28px rgba(22, 34, 50, .045);
-    }
-
-    * {
-      box-sizing: border-box
-    }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font: 14px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif
-    }
-
-    button {
-      font: inherit
-    }
-
-    .app {
-      min-height: 100vh
-    }
-
-    .topbar {
-      height: 68px;
-      background: rgba(255, 255, 255, .92);
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 max(24px, calc((100vw - 1240px)/2));
-      position: sticky;
-      top: 0;
-      z-index: 5;
-      backdrop-filter: blur(12px)
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      font-weight: 750;
-      letter-spacing: -.03em;
-      font-size: 16px
-    }
-
-    .logo {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
-      background: var(--accent);
-      color: #fff;
-      display: grid;
-      place-items: center;
-      font-weight: 800
-    }
-
-    .brand small {
-      display: block;
-      color: var(--muted);
-      font-weight: 500;
-      font-size: 11px;
-      letter-spacing: 0
-    }
-
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px
-    }
-
-    .updated {
-      font-size: 12px;
-      color: var(--muted)
-    }
-
-    .status {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      border-radius: 999px;
-      padding: 6px 11px;
-      font-size: 12px;
-      font-weight: 700;
-      background: var(--green-bg);
-      color: var(--green)
-    }
-
-    .dot {
-      width: 7px;
-      height: 7px;
-      background: currentColor;
-      border-radius: 50%
-    }
-
-    .container {
-      max-width: 1240px;
-      margin: 0 auto;
-      padding: 34px 24px 60px
-    }
-
-    .heading {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 25px
-    }
-
-    .eyebrow {
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      font-size: 10px;
-      font-weight: 750;
-      color: var(--muted)
-    }
-
-    h1 {
-      font-size: 27px;
-      letter-spacing: -.045em;
-      line-height: 1.2;
-      margin: 5px 0 7px
-    }
-
-    .subtitle {
-      color: var(--muted);
-      margin: 0
-    }
-
-    .btn {
-      border: 1px solid var(--line);
-      background: #fff;
-      color: var(--text);
-      padding: 9px 13px;
-      border-radius: 9px;
-      font-weight: 650;
-      cursor: pointer
-    }
-
-    .btn:hover {
-      border-color: #cbd4df;
-      background: var(--surface-2)
-    }
-
-    .btn.primary {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent)
-    }
-
-    .metrics {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
-      margin-bottom: 18px
-    }
-
-    .metric,
-    .panel {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      box-shadow: var(--shadow)
-    }
-
-    .metric {
-      padding: 17px 18px
-    }
-
-    .metric-label {
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 600
-    }
-
-    .metric-value {
-      font-size: 25px;
-      font-weight: 750;
-      letter-spacing: -.04em;
-      margin-top: 7px
-    }
-
-    .metric-foot {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 3px
-    }
-
-    .metric-value.green {
-      color: var(--green)
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.55fr) minmax(300px, .85fr);
-      gap: 16px;
-      align-items: start
-    }
-
-    .stack {
-      display: grid;
-      gap: 16px
-    }
-
-    .panel {
-      padding: 19px
-    }
-
-    .panel-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 15px
-    }
-
-    .panel h2 {
-      font-size: 14px;
-      letter-spacing: -.01em;
-      margin: 0;
-      font-weight: 750
-    }
-
-    .panel-note {
-      font-size: 11px;
-      color: var(--muted)
-    }
-
-    .check-list {
-      display: grid;
-      gap: 0
-    }
-
-    .check {
-      display: flex;
-      align-items: flex-start;
-      gap: 11px;
-      padding: 11px 0;
-      border-bottom: 1px solid var(--line)
-    }
-
-    .check:last-child {
-      border-bottom: 0;
-      padding-bottom: 0
-    }
-
-    .check-icon {
-      width: 21px;
-      height: 21px;
-      flex: 0 0 21px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: var(--green-bg);
-      color: var(--green);
-      font-size: 12px;
-      font-weight: 800
-    }
-
-    .check strong {
-      display: block;
-      font-size: 12px;
-      margin: 1px 0 2px
-    }
-
-    .check p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 11px
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 6px;
-      padding: 3px 7px;
-      font-size: 10px;
-      font-weight: 750;
-      white-space: nowrap
-    }
-
-    .tag.green {
-      background: var(--green-bg);
-      color: var(--green)
-    }
-
-    .tag.amber {
-      background: var(--amber-bg);
-      color: var(--amber)
-    }
-
-    .tag.red {
-      background: var(--red-bg);
-      color: var(--red)
-    }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px
-    }
-
-    .summary-item {
-      background: var(--surface-2);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 12px
-    }
-
-    .summary-item span {
-      display: block;
-      color: var(--muted);
-      font-size: 10px;
-      margin-bottom: 5px
-    }
-
-    .summary-item strong {
-      font-size: 13px
-    }
-
-    .summary-item small {
-      display: block;
-      color: var(--muted);
-      font-size: 10px;
-      margin-top: 3px
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse
-    }
-
-    th,
-    td {
-      padding: 10px 8px;
-      text-align: left;
-      border-bottom: 1px solid var(--line);
-      font-size: 11px;
-      vertical-align: top
-    }
-
-    th {
-      color: var(--muted);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: .07em;
-      font-weight: 700
-    }
-
-    tr:last-child td {
-      border-bottom: 0
-    }
-
-    .num {
-      text-align: right;
-      white-space: nowrap;
-      font-variant-numeric: tabular-nums
-    }
-
-    .total td {
-      font-weight: 750;
-      border-top: 1px solid var(--line);
-      color: var(--text)
-    }
-
-    .budget-bar {
-      height: 7px;
-      background: #edf0f4;
-      border-radius: 20px;
-      overflow: hidden;
-      margin: 12px 0 8px
-    }
-
-    .budget-bar span {
-      height: 100%;
-      display: block;
-      width: 84.2%;
-      background: var(--accent);
-      border-radius: 20px
-    }
-
-    .budget-meta {
-      display: flex;
-      justify-content: space-between;
-      color: var(--muted);
-      font-size: 10px
-    }
-
-    .timeline {
-      display: grid;
-      gap: 0
-    }
-
-    .event {
-      display: grid;
-      grid-template-columns: 112px 1fr;
-      gap: 13px;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--line)
-    }
-
-    .event:last-child {
-      border-bottom: 0;
-      padding-bottom: 0
-    }
-
-    .time {
-      font-size: 10px;
-      color: var(--muted);
-      font-variant-numeric: tabular-nums;
-      padding-top: 2px
-    }
-
-    .event-title {
-      font-size: 11px;
-      font-weight: 700
-    }
-
-    .event-duration {
-      font-size: 10px;
-      color: var(--muted);
-      margin-top: 2px
-    }
-
-    .message-toolbar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap
-    }
-
-    .search {
-      border: 1px solid var(--line);
-      background: var(--surface-2);
-      border-radius: 8px;
-      padding: 8px 10px;
-      min-width: 190px;
-      outline: none
-    }
-
-    .search:focus {
-      border-color: var(--accent)
-    }
-
-    .filter {
-      border: 1px solid var(--line);
-      background: #fff;
-      color: var(--muted);
-      border-radius: 8px;
-      padding: 7px 10px;
-      font-size: 11px;
-      cursor: pointer
-    }
-
-    .filter.active {
-      background: var(--accent-soft);
-      border-color: #d7e2ff;
-      color: var(--accent);
-      font-weight: 700
-    }
-
-    .messages {
-      margin-top: 4px
-    }
-
-    .messages td {
-      font-size: 11px
-    }
-
-    .sender {
-      font-weight: 650
-    }
-
-    .date {
-      display: block;
-      color: var(--muted);
-      font-size: 10px
-    }
-
-    .reason {
-      color: var(--muted)
-    }
-
-    details {
-      border-top: 1px solid var(--line);
-      padding: 12px 0
-    }
-
-    details:first-of-type {
-      border-top: 0
-    }
-
-    summary {
-      cursor: pointer;
-      font-size: 11px;
-      font-weight: 700;
-      list-style: none;
-      display: flex;
-      justify-content: space-between;
-      gap: 12px
-    }
-
-    summary::-webkit-details-marker {
-      display: none
-    }
-
-    summary:after {
-      content: "＋";
-      color: var(--muted)
-    }
-
-    details[open] summary:after {
-      content: "−"
-    }
-
-    .trace-meta {
-      font-weight: 500;
-      color: var(--muted)
-    }
-
-    pre {
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      max-height: 250px;
-      overflow: auto;
-      background: #f7f8fa;
-      border: 1px solid var(--line);
-      border-radius: 9px;
-      padding: 12px;
-      font: 10px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace;
-      color: #465365
-    }
-
-    .footer {
-      color: var(--muted);
-      font-size: 10px;
-      text-align: center;
-      margin-top: 22px
-    }
-
-    @media(max-width:900px) {
-      .metrics {
-        grid-template-columns: repeat(2, 1fr)
-      }
-
-      .layout {
-        grid-template-columns: 1fr
-      }
-    }
-
-    @media(max-width:560px) {
-      .topbar {
-        padding: 0 16px
-      }
-
-      .container {
-        padding: 25px 14px 40px
-      }
-
-      .heading {
-        align-items: flex-start;
-        flex-direction: column
-      }
-
-      h1 {
-        font-size: 23px
-      }
-
-      .metrics {
-        gap: 9px
-      }
-
-      .metric {
-        padding: 13px
-      }
-
-      .metric-value {
-        font-size: 21px
-      }
-
-      .summary-grid {
-        grid-template-columns: 1fr
-      }
-
-      .event {
-        grid-template-columns: 94px 1fr
-      }
-
-      .panel {
-        padding: 15px
-      }
-
-      .updated {
-        display: none
-      }
-
-      .table-wrap {
-        overflow-x: auto
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <div class="app">
-    <header class="topbar">
-      <div class="brand">
-        <div class="logo">M</div>
-        <div>mind to machine<small>EVENT PLANNER</small></div>
-      </div>
-      <div class="top-actions"><span class="updated">Auto-refresh · every 4 seconds</span><span class="status"><i
-            class="dot"></i> Plan valid</span></div>
-    </header>
-    <main class="container">
-      <section class="heading">
-        <div>
-          <div class="eyebrow">Planning workspace / Overview</div>
-          <h1>Hackathon event plan</h1>
-          <p class="subtitle">A clear view of your event, budget and operational checks.</p>
-        </div>
-        <button class="btn" onclick="window.print()">Export / Print report</button>
-      </section>
-
-      <section class="metrics">
-        <article class="metric">
-          <div class="metric-label">Total budget</div>
-          <div class="metric-value">Rs 650,000</div>
-          <div class="metric-foot">Approved event budget</div>
-        </article>
-        <article class="metric">
-          <div class="metric-label">Projected spend</div>
-          <div class="metric-value">Rs 547,400</div>
-          <div class="metric-foot">84.2% of available budget</div>
-        </article>
-        <article class="metric">
-          <div class="metric-label">Budget remaining</div>
-          <div class="metric-value green">Rs 102,600</div>
-          <div class="metric-foot">Before any unapproved proposals</div>
-        </article>
-        <article class="metric">
-          <div class="metric-label">People attending</div>
-          <div class="metric-value">177</div>
-          <div class="metric-foot">150 students · 10 staff · 17 judges</div>
-        </article>
-      </section>
-
-      <section class="layout">
-        <div class="stack">
-          <article class="panel">
-            <div class="panel-head">
-              <h2>Plan validation</h2><span class="tag green">7 of 7 passed</span>
-            </div>
-            <div class="check-list">
-              <div class="check"><span class="check-icon">✓</span>
-                <div><strong>Correct figures</strong>
-                  <p>50 teams · 177 people (150 students, 10 staff, 17 judges)</p>
-                </div>
-              </div>
-              <div class="check"><span class="check-icon">✓</span>
-                <div><strong>Within budget</strong>
-                  <p>Rs 547,400 projected against Rs 650,000; Rs 102,600 remaining</p>
-                </div>
-              </div>
-              <div class="check"><span class="check-icon">✓</span>
-                <div><strong>Venue capacity</strong>
-                  <p>Hall A seats 200 for 177 attendees</p>
-                </div>
-              </div>
-              <div class="check"><span class="check-icon">✓</span>
-                <div><strong>Schedule valid</strong>
-                  <p>240 of 240 minutes allocated; 125 minutes of build time</p>
-                </div>
-              </div>
-              <div class="check"><span class="check-icon">✓</span>
-                <div><strong>Enough judges</strong>
-                  <p>17 required, 20 confirmed; maximum 3 teams per judge</p>
-                </div>
-              </div>
-              <div class="check"><span class="check-icon">✓</span>
-                <div><strong>Planning areas covered</strong>
-                  <p>Venue, schedule, food, judging and budget</p>
-                </div>
-              </div>
-              <div class="check"><span class="check-icon">✓</span>
-                <div><strong>Food quantity</strong>
-                  <p>177 meals planned for everyone attending</p>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <article class="panel">
-            <div class="panel-head">
-              <h2>Event schedule</h2><span class="panel-note">4 hours · 240 minutes</span>
-            </div>
-            <div class="timeline">
-              <div class="event">
-                <div class="time">00:00 — 00:10</div>
-                <div>
-                  <div class="event-title">Kickoff and briefing</div>
-                  <div class="event-duration">10 minutes</div>
-                </div>
-              </div>
-              <div class="event">
-                <div class="time">00:10 — 01:10</div>
-                <div>
-                  <div class="event-title">Build time · Part 1</div>
-                  <div class="event-duration">60 minutes</div>
-                </div>
-              </div>
-              <div class="event">
-                <div class="time">01:10 — 01:25</div>
-                <div>
-                  <div class="event-title">Prayer break</div>
-                  <div class="event-duration">15 minutes</div>
-                </div>
-              </div>
-              <div class="event">
-                <div class="time">01:25 — 01:55</div>
-                <div>
-                  <div class="event-title">Lunch</div>
-                  <div class="event-duration">30 minutes</div>
-                </div>
-              </div>
-              <div class="event">
-                <div class="time">01:55 — 03:00</div>
-                <div>
-                  <div class="event-title">Build time · Part 2</div>
-                  <div class="event-duration">65 minutes</div>
-                </div>
-              </div>
-              <div class="event">
-                <div class="time">03:00 — 03:45</div>
-                <div>
-                  <div class="event-title">Judging</div>
-                  <div class="event-duration">45 minutes · 3 teams per judge</div>
-                </div>
-              </div>
-              <div class="event">
-                <div class="time">03:45 — 04:00</div>
-                <div>
-                  <div class="event-title">Awards and closing</div>
-                  <div class="event-duration">15 minutes</div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <article class="panel">
-            <div class="panel-head">
-              <h2>Incoming messages</h2><span class="panel-note">10 recorded</span>
-            </div>
-            <div class="message-toolbar">
-              <input id="search" class="search" placeholder="Search messages…" aria-label="Search messages">
-              <button class="filter active" data-filter="all">All</button>
-              <button class="filter" data-filter="USED">Used</button>
-              <button class="filter" data-filter="OUTDATED">Outdated</button>
-              <button class="filter" data-filter="NOT APPROVED">Not approved</button>
-              <button class="filter" data-filter="IGNORED">Ignored</button>
-            </div>
-            <div class="table-wrap messages">
-              <table id="messages">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Sender</th>
-                    <th>Message summary</th>
-                    <th>Status</th>
-                    <th>Reason</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr data-status="USED">
-                    <td>01</td>
-                    <td class="sender">Dean's office<span class="date">09 Nov 2026</span></td>
-                    <td>Hackathon approval, budget and constraints</td>
-                    <td><span class="tag green">USED</span></td>
-                    <td class="reason">—</td>
-                  </tr>
-                  <tr data-status="USED">
-                    <td>02</td>
-                    <td class="sender">Margalla Event Halls<span class="date">03 Nov 2026</span></td>
-                    <td>Venue options and pricing</td>
-                    <td><span class="tag green">USED</span></td>
-                    <td class="reason">—</td>
-                  </tr>
-                  <tr data-status="OUTDATED">
-                    <td>03</td>
-                    <td class="sender">Caterer<span class="date">20 Oct 2026</span></td>
-                    <td>Standard lunch box price: Rs 1,000</td>
-                    <td><span class="tag amber">OUTDATED</span></td>
-                    <td class="reason">Replaced by newer message 04</td>
-                  </tr>
-                  <tr data-status="USED">
-                    <td>04</td>
-                    <td class="sender">Caterer<span class="date">12 Nov 2026</span></td>
-                    <td>Updated lunch box price: Rs 1,200</td>
-                    <td><span class="tag green">USED</span></td>
-                    <td class="reason">Latest price used</td>
-                  </tr>
-                  <tr data-status="USED">
-                    <td>05</td>
-                    <td class="sender">Judging coordinator<span class="date">11 Nov 2026</span></td>
-                    <td>Judge availability, honorarium and team limits</td>
-                    <td><span class="tag green">USED</span></td>
-                    <td class="reason">—</td>
-                  </tr>
-                  <tr data-status="USED">
-                    <td>06</td>
-                    <td class="sender">Finance<span class="date">10 Nov 2026</span></td>
-                    <td>Committed event expenses</td>
-                    <td><span class="tag green">USED</span></td>
-                    <td class="reason">—</td>
-                  </tr>
-                  <tr data-status="NOT APPROVED">
-                    <td>07</td>
-                    <td class="sender">Student society<span class="date">13 Nov 2026</span></td>
-                    <td>DJ proposal for the closing: Rs 50,000</td>
-                    <td><span class="tag amber">NOT APPROVED</span></td>
-                    <td class="reason">No approval recorded</td>
-                  </tr>
-                  <tr data-status="IGNORED">
-                    <td>08</td>
-                    <td class="sender">A judge<span class="date">14 Nov 2026</span></td>
-                    <td>Possible 10-minute delay due to traffic</td>
-                    <td><span class="tag amber">IGNORED</span></td>
-                    <td class="reason">No planning rule or confirmed change</td>
-                  </tr>
-                  <tr data-status="IGNORED">
-                    <td>09</td>
-                    <td class="sender">Unknown<span class="date">—</span></td>
-                    <td>System command execution path</td>
-                    <td><span class="tag amber">IGNORED</span></td>
-                    <td class="reason">Technical command, not event information</td>
-                  </tr>
-                  <tr data-status="IGNORED">
-                    <td>10</td>
-                    <td class="sender">Unknown<span class="date">—</span></td>
-                    <td>System command execution script path</td>
-                    <td><span class="tag amber">IGNORED</span></td>
-                    <td class="reason">Not relevant to event planning</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </article>
-        </div>
-
-        <aside class="stack">
-          <article class="panel">
-            <div class="panel-head">
-              <h2>Event essentials</h2><span class="panel-note">Current selection</span>
-            </div>
-            <div class="summary-grid">
-              <div class="summary-item"><span>Venue</span><strong>Hall A</strong><small>200 seats</small></div>
-              <div class="summary-item"><span>Food</span><strong>Standard lunch</strong><small>177 meals</small></div>
-              <div class="summary-item"><span>Judges</span><strong>17 assigned</strong><small>20 confirmed</small></div>
-            </div>
-          </article>
-
-          <article class="panel">
-            <div class="panel-head">
-              <h2>Budget breakdown</h2><span class="panel-note">PKR</span>
-            </div>
-            <table>
-              <tbody>
-                <tr>
-                  <td>Prizes</td>
-                  <td class="num">100,000</td>
-                </tr>
-                <tr>
-                  <td>Backup internet</td>
-                  <td class="num">20,000</td>
-                </tr>
-                <tr>
-                  <td>Printing</td>
-                  <td class="num">10,000</td>
-                </tr>
-                <tr>
-                  <td>Venue · Hall A</td>
-                  <td class="num">120,000</td>
-                </tr>
-                <tr>
-                  <td>Food · 177 × 1,200</td>
-                  <td class="num">212,400</td>
-                </tr>
-                <tr>
-                  <td>Judges · 17 × 5,000</td>
-                  <td class="num">85,000</td>
-                </tr>
-                <tr class="total">
-                  <td>Projected total</td>
-                  <td class="num">547,400</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="budget-bar"><span></span></div>
-            <div class="budget-meta"><span>84.2% used</span><span>15.8% remaining</span></div>
-          </article>
-
-          <article class="panel">
-            <div class="panel-head">
-              <h2>Planning assumptions</h2><span class="panel-note">Review if needed</span>
-            </div>
-            <div class="check-list">
-              <div class="check"><span class="check-icon"
-                  style="background:var(--accent-soft);color:var(--accent)">i</span>
-                <div><strong>Attendee count</strong>
-                  <p>Students + staff + judges actually needed.</p>
-                </div>
-              </div>
-              <div class="check"><span class="check-icon"
-                  style="background:var(--accent-soft);color:var(--accent)">i</span>
-                <div><strong>Opening session</strong>
-                  <p>Assumed 10 minutes; no duration was supplied.</p>
-                </div>
-              </div>
-              <div class="check"><span class="check-icon"
-                  style="background:var(--accent-soft);color:var(--accent)">i</span>
-                <div><strong>Lunch duration</strong>
-                  <p>Assumed 30 minutes; no duration was supplied.</p>
-                </div>
-              </div>
-              <div class="check"><span class="check-icon"
-                  style="background:var(--accent-soft);color:var(--accent)">i</span>
-                <div><strong>Closing session</strong>
-                  <p>Assumed 15 minutes; no duration was supplied.</p>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <article class="panel">
-            <div class="panel-head">
-              <h2>AI activity</h2><span class="panel-note">3 recorded calls</span>
-            </div>
-            <p class="panel-note" style="margin:0 0 12px">Gemini reads messages. Python calculates and validates the
-              plan.</p>
-            <details>
-              <summary>Call 1 <span class="trace-meta">2,269 tokens · reading</span></summary>
-              <p class="panel-note">Initial extraction of event messages and structured facts.</p>
-            </details>
-            <details>
-              <summary>Call 2 <span class="trace-meta">601 tokens · reading</span></summary>
-              <p class="panel-note">A technical command was classified as irrelevant.</p>
-            </details>
-            <details>
-              <summary>Call 3 <span class="trace-meta">610 tokens · reading</span></summary>
-              <p class="panel-note">A second technical command was classified as irrelevant.</p>
-            </details>
-            <div class="panel-note">Total recorded usage: 3,480 tokens.</div>
-          </article>
-        </aside>
-      </section>
-      <div class="footer">Mind to Machine · Event planning workspace · Data shown from the supplied report snapshot
-      </div>
-    </main>
-  </div>
-  <script>
-    const search = document.getElementById('search');
-    const rows = [...document.querySelectorAll('#messages tbody tr')];
-    let filter = 'all';
-    function applyFilters() {
-      const q = search.value.toLowerCase();
-      rows.forEach(row => {
-        const matchesText = row.textContent.toLowerCase().includes(q);
-        const matchesStatus = filter === 'all' || row.dataset.status === filter;
-        row.hidden = !(matchesText && matchesStatus);
-      });
-    }
-    search.addEventListener('input', applyFilters);
-    document.querySelectorAll('.filter').forEach(btn => btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active'); filter = btn.dataset.filter; applyFilters();
-    }));
-  </script>
-</body>
-
-</html>
+<!DOCTYPE html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><meta http-equiv='refresh' content='4'><title>Event plan</title><style>:root{--bg:#f6f7f9;--card:#fff;--text:#1b1f24;--muted:#5d6672;--line:#dfe3e8;--ok:#1b6e3a;--okbg:#e5f6ea;--bad:#c62828;--badbg:#fdecec;--warn:#8a5a00;--warnbg:#fff4d6;--acc:#1f6feb;color-scheme:light dark}
+@media (prefers-color-scheme:dark){:root{--bg:#111418;--card:#1b2027;--text:#e8ebef;--muted:#9aa4b0;--line:#2c333c;--ok:#7ee2a0;--okbg:#16301f;--bad:#ff8a80;--badbg:#3a1d1d;--warn:#ffd27a;--warnbg:#3a2f14;--acc:#58a6ff}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,sans-serif}
+main{max-width:980px;margin:0 auto;padding:16px}h1{margin:0 0 4px}h2{margin:0 0 8px;font-size:1.05rem}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;overflow-x:auto}
+table{border-collapse:collapse;width:100%}td,th{padding:4px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.b{display:inline-block;border-radius:999px;padding:1px 10px;font-size:.8rem;font-weight:600}
+.PASS,.USED,.VALID{background:var(--okbg);color:var(--ok)}.FAIL,.REJECTED,.INVALID{background:var(--badbg);color:var(--bad)}
+.IGNORED,.OUTDATED,.NOTAPPROVED{background:var(--warnbg);color:var(--warn)}
+pre{white-space:pre-wrap;word-break:break-word;background:var(--bg);padding:8px;border-radius:8px;max-height:260px;overflow:auto;font-size:.8rem}
+.muted{color:var(--muted)}.note{padding:4px 0;border-bottom:1px solid var(--line)}</style></head><body><main><h1>Mind to Machine: event plan <span class='b VALID'>VALID</span></h1><div class='muted'>Model: gemini-3.5-flash-lite. The model only reads messages; code plans and checks. Page refreshes every 4 s.</div><div class='grid'><div class='card'><h2>Checks</h2><table><tr><td><span class='b PASS'>PASS</span></td><td><b>Correct figures</b><br><span class='muted'>50 teams; 177 people = 150 students + 10 staff + 17 judges</span></td></tr><tr><td><span class='b PASS'>PASS</span></td><td><b>Within budget</b><br><span class='muted'>cost Rs 547,400 of Rs 650,000 (left Rs 102,600, reserve Rs 0)</span></td></tr><tr><td><span class='b PASS'>PASS</span></td><td><b>Venue fits</b><br><span class='muted'>Hall A seats 200 for 177 people</span></td></tr><tr><td><span class='b PASS'>PASS</span></td><td><b>Schedule valid</b><br><span class='muted'>blocks add up to 240 of 240 min; build time 125 min (min 60)</span></td></tr><tr><td><span class='b PASS'>PASS</span></td><td><b>Enough judges</b><br><span class='muted'>need 17 (50 teams, max per judge), have 20; each covers 3 teams</span></td></tr><tr><td><span class='b PASS'>PASS</span></td><td><b>All areas covered</b><br><span class='muted'>venue, schedule, food, judging, budget</span></td></tr><tr><td><span class='b PASS'>PASS</span></td><td><b>Food covers everyone</b><br><span class='muted'>177 meals planned</span></td></tr></table></div><div class='card'><h2>Venue, food, judging</h2><p><b>Venue:</b> Hall A (seats 200, Rs 120,000)</p><p><b>Food:</b> 177 x Rs 1,200 (Standard lunch box) = Rs 212,400</p><p><b>Judging:</b> 17 judges of 20 confirmed; each covers 3 teams x 15 min; honorarium Rs 85,000</p><p class='muted'>150 students, 50 teams, 177 people on site</p></div><div class='card'><h2>Schedule</h2><table><tr><td>T+0:00-T+0:10</td><td>10 min</td><td>Kickoff and briefing</td></tr><tr><td>T+0:10-T+1:10</td><td>60 min</td><td>Build time (part 1)</td></tr><tr><td>T+1:10-T+1:25</td><td>15 min</td><td>prayer break</td></tr><tr><td>T+1:25-T+1:55</td><td>30 min</td><td>Lunch</td></tr><tr><td>T+1:55-T+3:00</td><td>65 min</td><td>Build time (part 2)</td></tr><tr><td>T+3:00-T+3:45</td><td>45 min</td><td>Judging: each judge visits 3 teams x 15 min</td></tr><tr><td>T+3:45-T+4:00</td><td>15 min</td><td>Awards and closing</td></tr></table></div><div class='card'><h2>Budget</h2><table><tr><td>prizes</td><td style='text-align:right'>Rs 100,000</td></tr><tr><td>backup internet</td><td style='text-align:right'>Rs 20,000</td></tr><tr><td>printing</td><td style='text-align:right'>Rs 10,000</td></tr><tr><td>Venue: Hall A</td><td style='text-align:right'>Rs 120,000</td></tr><tr><td>Food: 177 x Rs 1,200 (Standard lunch box)</td><td style='text-align:right'>Rs 212,400</td></tr><tr><td>Judges: 17 x Rs 5,000</td><td style='text-align:right'>Rs 85,000</td></tr><tr><th>Total</th><th style='text-align:right'>Rs 547,400</th></tr><tr><td class='muted'>Budget / left</td><td class='muted' style='text-align:right'>Rs 650,000 / Rs 102,600</td></tr></table><p class='muted'>Assumption: People to feed = students + staff + judges actually needed.</p><p class='muted'>Assumption: No opening session given; assumed 10 min.</p><p class='muted'>Assumption: No lunch length given; assumed 30 min.</p><p class='muted'>Assumption: No closing session given; assumed 15 min.</p></div></div><div class='card' style='margin-top:12px'><h2>Messages</h2><table><tr><th>#</th><th>From</th><th>Gist</th><th>Status</th><th>Why</th></tr><tr><td>1</td><td>Dean&#x27;s office <span class='muted'>2026-11-09</span></td><td>Hackathon approval, budget, and constraints.</td><td><span class='b USED'>USED</span></td><td class='muted'></td></tr><tr><td>2</td><td>Margalla Event Halls <span class='muted'>2026-11-03</span></td><td>Venue options and pricing.</td><td><span class='b USED'>USED</span></td><td class='muted'></td></tr><tr><td>3</td><td>Caterer <span class='muted'>2026-10-20</span></td><td>Standard lunch box price.</td><td><span class='b OUTDATED'>OUTDATED</span></td><td class='muted'>replaced by newer message 4</td></tr><tr><td>4</td><td>Caterer <span class='muted'>2026-11-12</span></td><td>Updated lunch box prices.</td><td><span class='b USED'>USED</span></td><td class='muted'></td></tr><tr><td>5</td><td>Judging coordinator <span class='muted'>2026-11-11</span></td><td>Judge details, honorarium, and team limits.</td><td><span class='b USED'>USED</span></td><td class='muted'></td></tr><tr><td>6</td><td>Finance <span class='muted'>2026-11-10</span></td><td>Committed event budget expenses.</td><td><span class='b USED'>USED</span></td><td class='muted'></td></tr><tr><td>7</td><td>Student society <span class='muted'>2026-11-13</span></td><td>DJ proposal for closing.</td><td><span class='b NOTAPPROVED'>NOT APPROVED</span></td><td class='muted'>request or quote nobody approved; kept out of the plan</td></tr><tr><td>8</td><td>A judge <span class='muted'>2026-11-14</span></td><td>Judge may be late due to traffic.</td><td><span class='b IGNORED'>IGNORED</span></td><td class='muted'>chatter about delay, no rule, price, or number</td></tr></table></div><div class='card' style='margin-top:12px'><h2>Trace (all runs)</h2><details><summary><b>Call 1</b> | gemini-3.5-flash-lite | area: reading | tokens in 847 / out 1422 / thinking 0 / total 2269</summary><b>Input</b><pre>You read event-planning messages (English or Roman Urdu, any format) and return ONLY JSON.
+Number messages from 1 in the order given (keep a number if the text shows one).
+Schema:
+{&quot;messages&quot;:[{&quot;n&quot;:1,&quot;sender&quot;:&quot;&quot;,&quot;date&quot;:&quot;YYYY-MM-DD or null&quot;,&quot;gist&quot;:&quot;max 8 words&quot;,&quot;relevant&quot;:true,&quot;note&quot;:&quot;why not relevant, else empty&quot;}],
+&quot;event&quot;:[{&quot;field&quot;:F,&quot;value&quot;:V,&quot;msg&quot;:n}],
+&quot;venues&quot;:[{&quot;name&quot;:&quot;&quot;,&quot;capacity&quot;:0,&quot;price&quot;:0,&quot;features&quot;:[],&quot;msg&quot;:n}],
+&quot;food&quot;:[{&quot;item&quot;:&quot;&quot;,&quot;price_per_head&quot;:0,&quot;msg&quot;:n}],
+&quot;food_orders&quot;:[{&quot;item&quot;:&quot;&quot;,&quot;quantity&quot;:0,&quot;msg&quot;:n}],
+&quot;spent&quot;:[{&quot;item&quot;:&quot;&quot;,&quot;amount&quot;:0,&quot;msg&quot;:n}],
+&quot;sessions&quot;:[{&quot;name&quot;:&quot;&quot;,&quot;minutes&quot;:0,&quot;msg&quot;:n}],
+&quot;constraints&quot;:[{&quot;type&quot;:T,&quot;value&quot;:V,&quot;text&quot;:&quot;&quot;,&quot;msg&quot;:n}],
+&quot;proposals&quot;:[{&quot;item&quot;:&quot;&quot;,&quot;cost&quot;:0,&quot;msg&quot;:n}]}
+F is one of: students, team_size, duration_hours, staff, budget_total, judges_confirmed, honorarium, minutes_per_team, max_teams_per_judge, start_time (HH:MM 24h).
+T is one of: venue_feature (value = needed feature, e.g. generator), budget_reserve_pct, budget_reserve_amount, max_cost_food, max_cost_venue, max_cost_judging, min_build_minutes, other (put the rule in text).
+Rules: copy numbers exactly as plain numbers (PKR, minutes, people); never calculate. Year is 2026.
+sessions = fixed breaks or ceremonies the schedule must contain. spent = money already committed from the budget.
+food_orders = a number of meals someone says they ordered or will deliver. proposals = requests or quotes nobody approved.
+relevant=false only for chatter that states no rule, price or number. Every message gets an entry in messages.
+Messages:
+1 | Dean&#x27;s office, email | 9 Nov
+&quot;Approved: a 4-hour hackathon for 150 students in teams of 3. The budget is Rs 650,000, all in. Ten staff will be on duty. Please keep a 15-minute prayer break in the schedule.&quot;
+
+2 | Margalla Event Halls, email | 3 Nov
+&quot;Room D seats 80 at Rs 40,000. Hall A seats 200 at Rs 120,000. Hall B seats 200 at Rs 150,000. Hall C seats 300 at Rs 220,000. Halls B and C have a standby generator.&quot;
+
+3 | Caterer, WhatsApp | 20 Oct
+&quot;Standard lunch box Rs 1,000 per head.&quot;
+
+4 | Caterer, WhatsApp | 12 Nov
+&quot;Salam bhai! Standard lunch box ab Rs 1,200 per head hoga, basic wala Rs 800. Delivery free hai.&quot;
+
+5 | Judging coordinator, email | 11 Nov
+&quot;20 judges have confirmed. The honorarium is Rs 5,000 each. A judge needs 15 minutes per team and should cover no more than three teams.&quot;
+
+6 | Finance, email | 10 Nov
+&quot;Already ordered from the event budget: prizes Rs 100,000, backup internet Rs 20,000, printing Rs 10,000.&quot;
+
+7 | Student society, WhatsApp | 13 Nov
+&quot;Can we get a DJ for the closing? The quote is Rs 50,000.&quot;
+
+8 | A judge, WhatsApp | 14 Nov
+&quot;I may be 10 minutes late on the day. Traffic on Srinagar Highway.&quot;
+</pre><b>Output</b><pre>{
+  &quot;messages&quot;: [
+    {
+      &quot;n&quot;: 1,
+      &quot;sender&quot;: &quot;Dean&#x27;s office&quot;,
+      &quot;date&quot;: &quot;2026-11-09&quot;,
+      &quot;gist&quot;: &quot;Hackathon approval, budget, and constraints.&quot;,
+      &quot;relevant&quot;: true,
+      &quot;note&quot;: &quot;&quot;
+    },
+    {
+      &quot;n&quot;: 2,
+      &quot;sender&quot;: &quot;Margalla Event Halls&quot;,
+      &quot;date&quot;: &quot;2026-11-03&quot;,
+      &quot;gist&quot;: &quot;Venue options and pricing.&quot;,
+      &quot;relevant&quot;: true,
+      &quot;note&quot;: &quot;&quot;
+    },
+    {
+      &quot;n&quot;: 3,
+      &quot;sender&quot;: &quot;Caterer&quot;,
+      &quot;date&quot;: &quot;2026-10-20&quot;,
+      &quot;gist&quot;: &quot;Standard lunch box price.&quot;,
+      &quot;relevant&quot;: true,
+      &quot;note&quot;: &quot;&quot;
+    },
+    {
+      &quot;n&quot;: 4,
+      &quot;sender&quot;: &quot;Caterer&quot;,
+      &quot;date&quot;: &quot;2026-11-12&quot;,
+      &quot;gist&quot;: &quot;Updated lunch box prices.&quot;,
+      &quot;relevant&quot;: true,
+      &quot;note&quot;: &quot;&quot;
+    },
+    {
+      &quot;n&quot;: 5,
+      &quot;sender&quot;: &quot;Judging coordinator&quot;,
+      &quot;date&quot;: &quot;2026-11-11&quot;,
+      &quot;gist&quot;: &quot;Judge details, honorarium, and team limits.&quot;,
+      &quot;relevant&quot;: true,
+      &quot;note&quot;: &quot;&quot;
+    },
+    {
+      &quot;n&quot;: 6,
+      &quot;sender&quot;: &quot;Finance&quot;,
+      &quot;date&quot;: &quot;2026-11-10&quot;,
+      &quot;gist&quot;: &quot;Committed event budget expenses.&quot;,
+      &quot;relevant&quot;: true,
+      &quot;note&quot;: &quot;&quot;
+    },
+    {
+      &quot;n&quot;: 7,
+      &quot;sender&quot;: &quot;Student society&quot;,
+      &quot;date&quot;: &quot;2026-11-13&quot;,
+      &quot;gist&quot;: &quot;DJ proposal for closing.&quot;,
+      &quot;relevant&quot;: true,
+      &quot;note&quot;: &quot;&quot;
+    },
+    {
+      &quot;n&quot;: 8,
+      &quot;sender&quot;: &quot;A judge&quot;,
+      &quot;date&quot;: &quot;2026-11-14&quot;,
+      &quot;gist&quot;: &quot;Judge may be late due to traffic.&quot;,
+      &quot;relevant&quot;: false,
+      &quot;note&quot;: &quot;chatter about delay, no rule, price, or number&quot;
+    }
+  ],
+  &quot;event&quot;: [
+    {
+      &quot;field&quot;: &quot;duration_hours&quot;,
+      &quot;value&quot;: 4,
+      &quot;msg&quot;: 1
+    },
+    {
+      &quot;field&quot;: &quot;students&quot;,
+      &quot;value&quot;: 150,
+      &quot;msg&quot;: 1
+    },
+    {
+      &quot;field&quot;: &quot;team_size&quot;,
+      &quot;value&quot;: 3,
+      &quot;msg&quot;: 1
+    },
+    {
+      &quot;field&quot;: &quot;budget_total&quot;,
+      &quot;value&quot;: 650000,
+      &quot;msg&quot;: 1
+    },
+    {
+      &quot;field&quot;: &quot;staff&quot;,
+      &quot;value&quot;: 10,
+      &quot;msg&quot;: 1
+    },
+    {
+      &quot;field&quot;: &quot;judges_confirmed&quot;,
+      &quot;value&quot;: 20,
+      &quot;msg&quot;: 5
+    },
+    {
+      &quot;field&quot;: &quot;honorarium&quot;,
+      &quot;value&quot;: 5000,
+      &quot;msg&quot;: 5
+    },
+    {
+      &quot;field&quot;: &quot;minutes_per_team&quot;,
+      &quot;value&quot;: 15,
+      &quot;msg&quot;: 5
+    },
+    {
+      &quot;field&quot;: &quot;max_teams_per_judge&quot;,
+      &quot;value&quot;: 3,
+      &quot;msg&quot;: 5
+    }
+  ],
+  &quot;venues&quot;: [
+    {
+      &quot;name&quot;: &quot;Room D&quot;,
+      &quot;capacity&quot;: 80,
+      &quot;price&quot;: 40000,
+      &quot;features&quot;: [],
+      &quot;msg&quot;: 2
+    },
+    {
+      &quot;name&quot;: &quot;Hall A&quot;,
+      &quot;capacity&quot;: 200,
+      &quot;price&quot;: 120000,
+      &quot;features&quot;: [],
+      &quot;msg&quot;: 2
+    },
+    {
+      &quot;name&quot;: &quot;Hall B&quot;,
+      &quot;capacity&quot;: 200,
+      &quot;price&quot;: 150000,
+      &quot;features&quot;: [
+        &quot;standby generator&quot;
+      ],
+      &quot;msg&quot;: 2
+    },
+    {
+      &quot;name&quot;: &quot;Hall C&quot;,
+      &quot;capacity&quot;: 300,
+      &quot;price&quot;: 220000,
+      &quot;features&quot;: [
+        &quot;standby generator&quot;
+      ],
+      &quot;msg&quot;: 2
+    }
+  ],
+  &quot;food&quot;: [
+    {
+      &quot;item&quot;: &quot;Standard lunch box&quot;,
+      &quot;price_per_head&quot;: 1000,
+      &quot;msg&quot;: 3
+    },
+    {
+      &quot;item&quot;: &quot;Standard lunch box&quot;,
+      &quot;price_per_head&quot;: 1200,
+      &quot;msg&quot;: 4
+    },
+    {
+      &quot;item&quot;: &quot;Basic lunch box&quot;,
+      &quot;price_per_head&quot;: 800,
+      &quot;msg&quot;: 4
+    }
+  ],
+  &quot;food_orders&quot;: [],
+  &quot;spent&quot;: [
+    {
+      &quot;item&quot;: &quot;prizes&quot;,
+      &quot;amount&quot;: 100000,
+      &quot;msg&quot;: 6
+    },
+    {
+      &quot;item&quot;: &quot;backup internet&quot;,
+      &quot;amount&quot;: 20000,
+      &quot;msg&quot;: 6
+    },
+    {
+      &quot;item&quot;: &quot;printing&quot;,
+      &quot;amount&quot;: 10000,
+      &quot;msg&quot;: 6
+    }
+  ],
+  &quot;sessions&quot;: [
+    {
+      &quot;name&quot;: &quot;prayer break&quot;,
+      &quot;minutes&quot;: 15,
+      &quot;msg&quot;: 1
+    }
+  ],
+  &quot;constraints&quot;: [],
+  &quot;proposals&quot;: [
+    {
+      &quot;item&quot;: &quot;DJ for the closing&quot;,
+      &quot;cost&quot;: 50000,
+      &quot;msg&quot;: 7
+    }
+  ]
+}</pre></details><div class='note'><span class='b IGNORED'>OUTDATED</span> Message 3 said Standard lunch box meal Rs 1000/head; newer message 4 says Standard lunch box meal Rs 1200/head. Using the newer one.</div><div class='note'><span class='b IGNORED'>OUTDATED</span> Message 3 (Caterer): replaced by newer message 4.</div><div class='note'><span class='b IGNORED'>NOT APPROVED</span> Message 7 (Student society): request or quote nobody approved; kept out of the plan.</div><div class='note'><span class='b IGNORED'>IGNORED</span> Message 8 (A judge): chatter about delay, no rule, price, or number.</div><div class='note'><span class='b VALID'>PLAN</span> VALID</div><p><b>Total tokens: 2269</b></p></div></main></body></html>
