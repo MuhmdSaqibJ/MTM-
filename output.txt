@@ -1,5 +1,396 @@
-Trace summary
-4 model calls, all gemini-3.5-flash-lite, all in the reading area.
-Call 1 (the full pack) used 2,283 tokens.
-Calls 2–4 used 603, 610 and 563 tokens.
-Total: 4,059 tokens. The plan stayed valid after every call.
+=== PLAN: VALID ===
+150 students, 50 teams, 177 people on site
+VENUE: Hall A (seats 200, Rs 120,000)
+SCHEDULE:
+  T+0:00-T+0:10   10 min  Kickoff and briefing
+  T+0:10-T+1:10   60 min  Build time (part 1)
+  T+1:10-T+1:25   15 min  prayer break
+  T+1:25-T+1:55   30 min  Lunch
+  T+1:55-T+3:00   65 min  Build time (part 2)
+  T+3:00-T+3:45   45 min  Judging: each judge visits 3 teams x 15 min
+  T+3:45-T+4:00   15 min  Awards and closing
+FOOD: 177 x Rs 1,200 (Standard lunch box) = Rs 212,400
+JUDGING: 17 judges needed of 20 confirmed; each covers 3 teams x 15 min; honorarium total Rs 85,000
+BUDGET:
+  prizes                                          Rs 100,000
+  backup internet                                  Rs 20,000
+  printing                                         Rs 10,000
+  Venue: Hall A                                   Rs 120,000
+  Food: 177 x Rs 1,200 (Standard lunch box)       Rs 212,400
+  Judges: 17 x Rs 5,000                            Rs 85,000
+  TOTAL                                           Rs 547,400   (budget Rs 650,000, left Rs 102,600)
+Assumption: People to feed = students + staff + judges actually needed.
+Assumption: No opening session given; assumed 10 min.
+Assumption: No lunch length given; assumed 30 min.
+Assumption: No closing session given; assumed 15 min.
+
+=== CHECKS ===
+[PASS] Correct figures: 50 teams; 177 people = 150 students + 10 staff + 17 judges
+[PASS] Within budget: cost Rs 547,400 of Rs 650,000 (left Rs 102,600, reserve Rs 0)
+[PASS] Venue fits: Hall A seats 200 for 177 people
+[PASS] Schedule valid: blocks add up to 240 of 240 min; build time 125 min (min 60)
+[PASS] Enough judges: need 17 (50 teams, max per judge), have 20; each covers 3 teams
+[PASS] All areas covered: venue, schedule, food, judging, budget
+[PASS] Food covers everyone: 177 meals planned
+
+=== MESSAGES ===
+#1 Dean's office 2026-11-09 [USED] Hackathon approval, budget, and constraints. 
+#2 Margalla Event Halls 2026-11-03 [USED] Venue options and pricing. 
+#3 Caterer 2026-10-20 [OUTDATED] Standard lunch box price. - replaced by newer message 4
+#4 Caterer 2026-11-12 [USED] Updated lunch box prices. 
+#5 Judging coordinator 2026-11-11 [USED] Judge details, honorarium, and team limits. 
+#6 Finance 2026-11-10 [USED] Committed event budget expenses. 
+#7 Student society 2026-11-13 [NOT APPROVED] DJ proposal for closing. - request or quote nobody approved; kept out of the plan
+#8 A judge 2026-11-14 [IGNORED] Judge may be late due to traffic. - chatter about delay, no rule, price, or number
+#9 ?  [IGNORED] System command execution path. - Technical command, no event details.
+#10 ?  [IGNORED] System command execution script path. - Chatter that states no rule, price, or number.
+
+=== TRACE ===
+--- MODEL CALL 1 | model: gemini-3.5-flash-lite | area: reading ---
+INPUT:
+You read event-planning messages (English or Roman Urdu, any format) and return ONLY JSON.
+Number messages from 1 in the order given (keep a number if the text shows one).
+Schema:
+{"messages":[{"n":1,"sender":"","date":"YYYY-MM-DD or null","gist":"max 8 words","relevant":true,"note":"why not relevant, else empty"}],
+"event":[{"field":F,"value":V,"msg":n}],
+"venues":[{"name":"","capacity":0,"price":0,"features":[],"msg":n}],
+"food":[{"item":"","price_per_head":0,"msg":n}],
+"food_orders":[{"item":"","quantity":0,"msg":n}],
+"spent":[{"item":"","amount":0,"msg":n}],
+"sessions":[{"name":"","minutes":0,"msg":n}],
+"constraints":[{"type":T,"value":V,"text":"","msg":n}],
+"proposals":[{"item":"","cost":0,"msg":n}]}
+F is one of: students, team_size, duration_hours, staff, budget_total, judges_confirmed, honorarium, minutes_per_team, max_teams_per_judge, start_time (HH:MM 24h).
+T is one of: venue_feature (value = needed feature, e.g. generator), budget_reserve_pct, budget_reserve_amount, max_cost_food, max_cost_venue, max_cost_judging, min_build_minutes, other (put the rule in text).
+Rules: copy numbers exactly as plain numbers (PKR, minutes, people); never calculate. Year is 2026.
+sessions = fixed breaks or ceremonies the schedule must contain. spent = money already committed from the budget.
+food_orders = a number of meals someone says they ordered or will deliver. proposals = requests or quotes nobody approved.
+relevant=false only for chatter that states no rule, price or number. Every message gets an entry in messages.
+Messages:
+1 | Dean's office, email | 9 Nov
+"Approved: a 4-hour hackathon for 150 students in teams of 3. The budget is Rs 650,000, all in. Ten staff will be on duty. Please keep a 15-minute prayer break in the schedule."
+
+2 | Margalla Event Halls, email | 3 Nov
+"Room D seats 80 at Rs 40,000. Hall A seats 200 at Rs 120,000. Hall B seats 200 at Rs 150,000. Hall C seats 300 at Rs 220,000. Halls B and C have a standby generator."
+
+3 | Caterer, WhatsApp | 20 Oct
+"Standard lunch box Rs 1,000 per head."
+
+4 | Caterer, WhatsApp | 12 Nov
+"Salam bhai! Standard lunch box ab Rs 1,200 per head hoga, basic wala Rs 800. Delivery free hai."
+
+5 | Judging coordinator, email | 11 Nov
+"20 judges have confirmed. The honorarium is Rs 5,000 each. A judge needs 15 minutes per team and should cover no more than three teams."
+
+6 | Finance, email | 10 Nov
+"Already ordered from the event budget: prizes Rs 100,000, backup internet Rs 20,000, printing Rs 10,000."
+
+7 | Student society, WhatsApp | 13 Nov
+"Can we get a DJ for the closing? The quote is Rs 50,000."
+
+8 | A judge, WhatsApp | 14 Nov
+"I may be 10 minutes late on the day. Traffic on Srinagar Highway."
+OUTPUT:
+{
+  "messages": [
+    {
+      "n": 1,
+      "sender": "Dean's office",
+      "date": "2026-11-09",
+      "gist": "Hackathon approval, budget, and constraints.",
+      "relevant": true,
+      "note": ""
+    },
+    {
+      "n": 2,
+      "sender": "Margalla Event Halls",
+      "date": "2026-11-03",
+      "gist": "Venue options and pricing.",
+      "relevant": true,
+      "note": ""
+    },
+    {
+      "n": 3,
+      "sender": "Caterer",
+      "date": "2026-10-20",
+      "gist": "Standard lunch box price.",
+      "relevant": true,
+      "note": ""
+    },
+    {
+      "n": 4,
+      "sender": "Caterer",
+      "date": "2026-11-12",
+      "gist": "Updated lunch box prices.",
+      "relevant": true,
+      "note": ""
+    },
+    {
+      "n": 5,
+      "sender": "Judging coordinator",
+      "date": "2026-11-11",
+      "gist": "Judge details, honorarium, and team limits.",
+      "relevant": true,
+      "note": ""
+    },
+    {
+      "n": 6,
+      "sender": "Finance",
+      "date": "2026-11-10",
+      "gist": "Committed event budget expenses.",
+      "relevant": true,
+      "note": ""
+    },
+    {
+      "n": 7,
+      "sender": "Student society",
+      "date": "2026-11-13",
+      "gist": "DJ proposal for closing.",
+      "relevant": true,
+      "note": ""
+    },
+    {
+      "n": 8,
+      "sender": "A judge",
+      "date": "2026-11-14",
+      "gist": "Judge may be late due to traffic.",
+      "relevant": false,
+      "note": "chatter about delay, no rule, price, or number"
+    }
+  ],
+  "event": [
+    {
+      "field": "duration_hours",
+      "value": 4,
+      "msg": 1
+    },
+    {
+      "field": "students",
+      "value": 150,
+      "msg": 1
+    },
+    {
+      "field": "team_size",
+      "value": 3,
+      "msg": 1
+    },
+    {
+      "field": "budget_total",
+      "value": 650000,
+      "msg": 1
+    },
+    {
+      "field": "staff",
+      "value": 10,
+      "msg": 1
+    },
+    {
+      "field": "judges_confirmed",
+      "value": 20,
+      "msg": 5
+    },
+    {
+      "field": "honorarium",
+      "value": 5000,
+      "msg": 5
+    },
+    {
+      "field": "minutes_per_team",
+      "value": 15,
+      "msg": 5
+    },
+    {
+      "field": "max_teams_per_judge",
+      "value": 3,
+      "msg": 5
+    }
+  ],
+  "venues": [
+    {
+      "name": "Room D",
+      "capacity": 80,
+      "price": 40000,
+      "features": [],
+      "msg": 2
+    },
+    {
+      "name": "Hall A",
+      "capacity": 200,
+      "price": 120000,
+      "features": [],
+      "msg": 2
+    },
+    {
+      "name": "Hall B",
+      "capacity": 200,
+      "price": 150000,
+      "features": [
+        "standby generator"
+      ],
+      "msg": 2
+    },
+    {
+      "name": "Hall C",
+      "capacity": 300,
+      "price": 220000,
+      "features": [
+        "standby generator"
+      ],
+      "msg": 2
+    }
+  ],
+  "food": [
+    {
+      "item": "Standard lunch box",
+      "price_per_head": 1000,
+      "msg": 3
+    },
+    {
+      "item": "Standard lunch box",
+      "price_per_head": 1200,
+      "msg": 4
+    },
+    {
+      "item": "Basic lunch box",
+      "price_per_head": 800,
+      "msg": 4
+    }
+  ],
+  "food_orders": [],
+  "spent": [
+    {
+      "item": "prizes",
+      "amount": 100000,
+      "msg": 6
+    },
+    {
+      "item": "backup internet",
+      "amount": 20000,
+      "msg": 6
+    },
+    {
+      "item": "printing",
+      "amount": 10000,
+      "msg": 6
+    }
+  ],
+  "sessions": [
+    {
+      "name": "prayer break",
+      "minutes": 15,
+      "msg": 1
+    }
+  ],
+  "constraints": [],
+  "proposals": [
+    {
+      "item": "DJ for the closing",
+      "cost": 50000,
+      "msg": 7
+    }
+  ]
+}
+TOKENS: input 847 | output 1422 | thinking 0 | total 2269
+
+  [OUTDATED] Message 3 said Standard lunch box meal Rs 1000/head; newer message 4 says Standard lunch box meal Rs 1200/head. Using the newer one.
+  [OUTDATED] Message 3 (Caterer): replaced by newer message 4.
+  [NOT APPROVED] Message 7 (Student society): request or quote nobody approved; kept out of the plan.
+  [IGNORED] Message 8 (A judge): chatter about delay, no rule, price, or number.
+  [PLAN] VALID
+--- MODEL CALL 2 | model: gemini-3.5-flash-lite | area: reading ---
+INPUT:
+You read event-planning messages (English or Roman Urdu, any format) and return ONLY JSON.
+Number messages from 9 in the order given (keep a number if the text shows one).
+Schema:
+{"messages":[{"n":1,"sender":"","date":"YYYY-MM-DD or null","gist":"max 8 words","relevant":true,"note":"why not relevant, else empty"}],
+"event":[{"field":F,"value":V,"msg":n}],
+"venues":[{"name":"","capacity":0,"price":0,"features":[],"msg":n}],
+"food":[{"item":"","price_per_head":0,"msg":n}],
+"food_orders":[{"item":"","quantity":0,"msg":n}],
+"spent":[{"item":"","amount":0,"msg":n}],
+"sessions":[{"name":"","minutes":0,"msg":n}],
+"constraints":[{"type":T,"value":V,"text":"","msg":n}],
+"proposals":[{"item":"","cost":0,"msg":n}]}
+F is one of: students, team_size, duration_hours, staff, budget_total, judges_confirmed, honorarium, minutes_per_team, max_teams_per_judge, start_time (HH:MM 24h).
+T is one of: venue_feature (value = needed feature, e.g. generator), budget_reserve_pct, budget_reserve_amount, max_cost_food, max_cost_venue, max_cost_judging, min_build_minutes, other (put the rule in text).
+Rules: copy numbers exactly as plain numbers (PKR, minutes, people); never calculate. Year is 2026.
+sessions = fixed breaks or ceremonies the schedule must contain. spent = money already committed from the budget.
+food_orders = a number of meals someone says they ordered or will deliver. proposals = requests or quotes nobody approved.
+relevant=false only for chatter that states no rule, price or number. Every message gets an entry in messages.
+Messages:
+& "C:/Users/SS COMTERS/AppData/Local/Python/bin/python.exe" d:/Softwares/ANTIGRAVITY/HACKATHON/plan.py
+OUTPUT:
+{
+  "messages": [
+    {
+      "n": 9,
+      "sender": "",
+      "date": null,
+      "gist": "System command execution path.",
+      "relevant": false,
+      "note": "Technical command, no event details."
+    }
+  ],
+  "event": [],
+  "venues": [],
+  "food": [],
+  "food_orders": [],
+  "spent": [],
+  "sessions": [],
+  "constraints": [],
+  "proposals": []
+}
+TOKENS: input 480 | output 121 | thinking 0 | total 601
+
+  [IGNORED] Message 9 (?): Technical command, no event details..
+  [UPDATED] Message read; no area changed. Areas that made model calls: reading only.
+  [PLAN] VALID
+--- MODEL CALL 3 | model: gemini-3.5-flash-lite | area: reading ---
+INPUT:
+You read event-planning messages (English or Roman Urdu, any format) and return ONLY JSON.
+Number messages from 10 in the order given (keep a number if the text shows one).
+Schema:
+{"messages":[{"n":1,"sender":"","date":"YYYY-MM-DD or null","gist":"max 8 words","relevant":true,"note":"why not relevant, else empty"}],
+"event":[{"field":F,"value":V,"msg":n}],
+"venues":[{"name":"","capacity":0,"price":0,"features":[],"msg":n}],
+"food":[{"item":"","price_per_head":0,"msg":n}],
+"food_orders":[{"item":"","quantity":0,"msg":n}],
+"spent":[{"item":"","amount":0,"msg":n}],
+"sessions":[{"name":"","minutes":0,"msg":n}],
+"constraints":[{"type":T,"value":V,"text":"","msg":n}],
+"proposals":[{"item":"","cost":0,"msg":n}]}
+F is one of: students, team_size, duration_hours, staff, budget_total, judges_confirmed, honorarium, minutes_per_team, max_teams_per_judge, start_time (HH:MM 24h).
+T is one of: venue_feature (value = needed feature, e.g. generator), budget_reserve_pct, budget_reserve_amount, max_cost_food, max_cost_venue, max_cost_judging, min_build_minutes, other (put the rule in text).
+Rules: copy numbers exactly as plain numbers (PKR, minutes, people); never calculate. Year is 2026.
+sessions = fixed breaks or ceremonies the schedule must contain. spent = money already committed from the budget.
+food_orders = a number of meals someone says they ordered or will deliver. proposals = requests or quotes nobody approved.
+relevant=false only for chatter that states no rule, price or number. Every message gets an entry in messages.
+Messages:
+& "C:/Users/SS COMTERS/AppData/Local/Python/bin/python.exe" d:/Softwares/ANTIGRAVITY/HACKATHON/plan.py
+OUTPUT:
+{
+  "messages": [
+    {
+      "n": 10,
+      "sender": null,
+      "date": null,
+      "gist": "System command execution script path.",
+      "relevant": false,
+      "note": "Chatter that states no rule, price, or number."
+    }
+  ],
+  "event": [],
+  "venues": [],
+  "food": [],
+  "food_orders": [],
+  "spent": [],
+  "sessions": [],
+  "constraints": [],
+  "proposals": []
+}
+TOKENS: input 481 | output 129 | thinking 0 | total 610
+
+  [IGNORED] Message 10 (?): Chatter that states no rule, price, or number..
+  [UPDATED] Message read; no area changed. Areas that made model calls: reading only.
+  [PLAN] VALID
+TOTAL TOKENS: 3480 in 3 model call(s) this run | 3480 across all runs
