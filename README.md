@@ -1,4 +1,3 @@
-# MTM-
 # Mind to Machine: event planner agent
 
 **Idea:** the model only *reads* messy messages (area `reading`). Plain Python does all arithmetic,
@@ -28,4 +27,3 @@ No packages to install (standard library only). Open `report.html` for the inter
 - Unknown constraint kinds: common ones are enforced (`venue_feature`, reserves, cost caps, min build time);
   anything else is shown as a WARNING instead of being silently dropped.
 - Schedule defaults (opening 10, lunch 30, closing 15, min build 60) apply only when no message sets them, and are printed as assumptions.
-
